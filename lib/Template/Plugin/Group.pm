@@ -23,11 +23,11 @@ Template::Plugin::Group - Template plugin to group lists into simple subgroups
 
 =head1 DESCRIPTION
 
-Template::Plugin::Group is a fairly simple (for now) module for grouping
-a list of things into a number of subgroups.
+C<Template::Plugin::Group> is a fairly simple (for now) module for
+grouping a list of things into a number of subgroups.
 
-In this intial implementation you can only group ARRAY references, and they
-can only be grouped into groups of a numbered size.
+In this intial implementation you can only group C<ARRAY> references,
+and they can only be grouped into groups of a numbered size.
 
 In practical terms, you can make columns of things and you can break up a
 list into smaller chunks (for example to chop a large lists into a number
@@ -40,10 +40,13 @@ of smaller lists for display purposes)
 use strict;
 use base 'Template::Plugin';
 use Template::Plugin;
+use Params::Util '_ARRAY',
+                 '_HASH',
+                 '_INSTANCE';
 
 use vars qw{$VERSION};
 BEGIN {
-	$VERSION = '0.01';
+	$VERSION = '0.02';
 }
 
 
@@ -55,7 +58,7 @@ BEGIN {
 
 =pod
 
-=head2 new \@ARRAY, $cols [, 'pad' ]
+=head2 new [ $Context, ] \@ARRAY, $cols [, 'pad' ]
 
 Although this is the "new" method, it doesn't really actually create any
 objects. It simply takes an array reference, splits up the list into
@@ -72,19 +75,19 @@ so that it has the full number.
 
 sub new {
 	my $class = shift;
+	shift if _INSTANCE($_[0], 'Template::Context');
 	unless ( defined $_[1] and $_[1] =~ /^[1-9]\d*$/ ) {
 		$class->error('Group constructor argument not a positive integer');
 	}
-	return $class->_new_array(@_) if ref $_[0] eq 'ARRAY';
-	return $class->_new_hash(@_)  if ref $_[0] eq 'HASH';
+	return $class->_new_array(@_) if _ARRAY($_[0]);
+	return $class->_new_hash(@_)  if _HASH($_[0]);
 	$class->error('Group constructor argument not an ARRAY or HASH ref');
 }
 
 sub _new_array {
 	# Make sure to copy the original array in case they care about it
-	my $class = shift;
-	my @array = @{shift()};
-	my $cols  = shift;
+	my ($class, $array_ref, $cols) = @_;
+	my @array = @$array_ref;
 
 	# Support the padding option
 	if ( grep { defined $_ and lc $_ eq 'pad' } @_ ) {
@@ -102,9 +105,7 @@ sub _new_array {
 }
 
 sub _new_hash {
-	my $class = shift;
-	my $hash  = shift;
-	my $cols  = shift;
+	my ($class, $hash, $cols) = @_;
 	$class->error('HASH grouping is not implented in this release');
 
 	# Implementation steps.
@@ -133,20 +134,21 @@ it needs to be rewritten and should probably be a separate plugin).
 
 Bugs should be submitted via the CPAN bug tracker, located at
 
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Template%3A%3APlugin%3A%3AGroup>
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Template-Plugin-Group>
 
-For other issues, contact the author
+For other issues, or commercial enhancement or support, contact the author.
 
 =head1 AUTHOR
 
-Adam Kennedy (Maintainer), L<http://ali.as/>, cpan@ali.as
+Adam Kennedy E<lt>cpan@ali.asE<gt>, L<http://ali.as/>
 
-Thank you to Phase N Australia (L<http://phase-n.com/>) for permitted the
+Thank you to Phase N Australia (L<http://phase-n.com/>) for permitting the
 open sourcing and release of this distribution.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2004 Adam Kennedy. All rights reserved.
+Copyright (c) 2004 - 2005 Adam Kennedy. All rights reserved.
+
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
 

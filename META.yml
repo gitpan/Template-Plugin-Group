@@ -1,7 +1,7 @@
 name: Template-Plugin-Group
-version: 0.01
+version: 0.02
 abstract: Template plugin to group lists into simple subgroups
-author: Adam Kennedy<cpan@ali.as>
+author: Adam Kennedy <cpan@ali.as>
 license: perl
 distribution_type: module
 build_requires:
@@ -10,7 +10,8 @@ build_requires:
 requires:
   perl: 5.005
   Template: 2.10
+  Params::Util: 0.05
 no_index:
   directory:
     - inc
-generated_by: Module::Install version 0.35
+generated_by: Module::Install version 0.37

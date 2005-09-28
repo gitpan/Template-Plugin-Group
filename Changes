@@ -1,4 +1,9 @@
 Revision history for Perl extension Template::Plugin::Group
 
-0.01 Sun Nov  21 2004
+0.02 Wed Sep 28 2005
+	- Fixed the outstanding bug
+	- Cleaned up a little
+	- Converted to use Params::Util
+
+0.01 Sun Nov 21 2004
 	- Created the initial version of the file
