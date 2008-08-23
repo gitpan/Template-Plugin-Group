@@ -1,18 +1,9 @@
-use inc::Module::Install;
+use inc::Module::Install 0.77;
 
-name          ( 'Template-Plugin-Group'           );
-abstract      ( 'Template plugin to group lists into simple subgroups' );
-author        ( 'Adam Kennedy <cpan@ali.as>'      );
-version_from  ( 'lib/Template/Plugin/Group.pm'    );
-license       ( 'perl'                            );
+all_from       'lib/Template/Plugin/Group.pm';
+requires       'Template'     => '2.10';
+requires       'Params::Util' => '0.25';
+build_requires 'Test::More'   => '0.47';
+build_requires 'File::Spec'   => '0.82';
 
-requires      ( 'perl'                 => '5.005' );
-requires      ( 'Template'             => '2.10'  );
-requires      ( 'Params::Util'         => '0.05'  );
-
-build_requires( 'Test::More'           => '0.47'  );
-build_requires( 'File::Spec'           => '0.82'  );
-
-auto_install();
-
-&WriteAll;
+WriteAll;
